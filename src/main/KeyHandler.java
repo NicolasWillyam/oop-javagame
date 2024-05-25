@@ -5,7 +5,12 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
 
-    public boolean upPressed, downPressed, leftPressed, rightPressed;
+    GamePanel gp;
+    public boolean upPressed, downPressed, leftPressed, rightPressed, enterPressed, yPressed;
+
+    public KeyHandler(GamePanel gp) {
+        this.gp = gp;
+    }
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -15,18 +20,44 @@ public class KeyHandler implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
-        if (code == KeyEvent.VK_W || code == 38) {
-            upPressed = true;
+
+        if (gp.gameState == gp.playState) {
+            if (code == KeyEvent.VK_W || code == 38) {
+                upPressed = true;
+            }
+            if (code == KeyEvent.VK_S || code == 40) {
+                downPressed = true;
+            }
+            if (code == KeyEvent.VK_A || code == 37) {
+                leftPressed = true;
+            }
+            if (code == KeyEvent.VK_D || code == 39) {
+                rightPressed = true;
+            }
+            if (code == KeyEvent.VK_ENTER) {
+
+                enterPressed = true;
+            }
+            if (code == KeyEvent.VK_Y) {
+                yPressed = true;
+            }
+            if (code == KeyEvent.VK_P) {
+                if (gp.gameState == gp.playState) {
+                    gp.gameState = gp.pauseState;
+                } else if (gp.gameState == gp.pauseState) {
+                    gp.gameState = gp.playState;
+
+                }
+            }
         }
-        if (code == KeyEvent.VK_S || code == 40) {
-            downPressed = true;
+
+        else if (gp.gameState == gp.dialogueState) {
+            if (code == KeyEvent.VK_ENTER) {
+                gp.gameState = gp.playState;
+
+            }
         }
-        if (code == KeyEvent.VK_A || code == 37) {
-            leftPressed = true;
-        }
-        if (code == KeyEvent.VK_D || code == 39) {
-            rightPressed = true;
-        }
+
     }
 
     @Override

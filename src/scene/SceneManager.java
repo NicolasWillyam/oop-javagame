@@ -20,7 +20,7 @@ public class SceneManager {
     public void getSceneImage() {
         try {
             scene[0] = new Scene();
-            scene[0].image = ImageIO.read(getClass().getResourceAsStream("../assets/scene/home-scene.png"));
+            scene[0].image = ImageIO.read(getClass().getResourceAsStream("../assets/tiles/grass-light-transp.png"));
 
         } catch (Exception e) {
             // TODO: handle exception
@@ -29,6 +29,6 @@ public class SceneManager {
     }
 
     public void draw(Graphics2D g2) {
-        g2.drawImage(scene[0].image, 0, 0, gp.screenWidth, gp.screenHeight, null);
+        g2.drawImage(scene[0].image, 0, 0, gp.tileSize * 5, gp.tileSize * 5, null);
     }
 }
