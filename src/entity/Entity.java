@@ -16,6 +16,9 @@ public class Entity {
     public String name;
 
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
+    public BufferedImage up_fight_1, up_fight_2, down_fight_1, down_fight_2, left_fight_1, left_fight_2, right_fight_1,
+            right_fight_2;
+
     public int width;
     public int height;
     public String direction;
@@ -28,6 +31,7 @@ public class Entity {
 
     public int actionLockCounter = 0;
     public boolean invincible = false;
+    public boolean attacking = false;
     public int invincibleCounter = 0;
     public int type;
 

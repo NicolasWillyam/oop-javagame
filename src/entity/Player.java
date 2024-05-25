@@ -32,14 +32,15 @@ public class Player extends Entity {
 
         solidArea = new Rectangle();
         solidArea.x = 8;
-        solidArea.y = 8;
+        solidArea.y = 16;
         solidAreaDefaultX = solidArea.x;
-        solidAreaDefaultY = solidArea.y;
+        solidAreaDefaultY = solidArea.y * 2;
         solidArea.width = 16;
-        solidArea.height = 16;
+        solidArea.height = 16 * 2;
 
         setDefaultValues();
         getPlayerImage();
+        getPlayerFightImage();
     }
 
     public void setDefaultValues() {
@@ -54,24 +55,38 @@ public class Player extends Entity {
     }
 
     public void getPlayerImage() {
+        up1 = setup("../assets/fighter/3");
+        up2 = setup("../assets/fighter/4");
+        down1 = setup("../assets/fighter/1");
+        down2 = setup("../assets/fighter/2");
+        left1 = setup("../assets/fighter/5");
+        left2 = setup("../assets/fighter/7");
+        right1 = setup("../assets/fighter/6");
+        right2 = setup("../assets/fighter/8");
+    }
+
+    public void getPlayerFightImage() {
         try {
-
-            up1 = ImageIO.read(getClass().getResourceAsStream("../assets/fighter/3.png"));
-            up2 = ImageIO.read(getClass().getResourceAsStream("../assets/fighter/4.png"));
-            down1 = ImageIO.read(getClass().getResourceAsStream("../assets/fighter/1.png"));
-            down2 = ImageIO.read(getClass().getResourceAsStream("../assets/fighter/2.png"));
-            left1 = ImageIO.read(getClass().getResourceAsStream("../assets/fighter/5.png"));
-            left2 = ImageIO.read(getClass().getResourceAsStream("../assets/fighter/7.png"));
-            right1 = ImageIO.read(getClass().getResourceAsStream("../assets/fighter/6.png"));
-            right2 = ImageIO.read(getClass().getResourceAsStream("../assets/fighter/8.png"));
-
-        } catch (IOException e) {
-            e.printStackTrace();
+            up_fight_1 = ImageIO.read(getClass().getResourceAsStream("./assets/fighter/up_fight_1.png"));
+            up_fight_2 = ImageIO.read(getClass().getResourceAsStream("./assets/fighter/up_fight_2.png"));
+            down_fight_1 = ImageIO.read(getClass().getResourceAsStream("./assets/fighter/down_fight_1.png"));
+            down_fight_1 = ImageIO.read(getClass().getResourceAsStream("./assets/fighter/down_fight_1.png"));
+            left_fight_1 = ImageIO.read(getClass().getResourceAsStream("./assets/fighter/left_fight_1.png"));
+            left_fight_1 = ImageIO.read(getClass().getResourceAsStream("./assets/fighter/left_fight_1.png"));
+            right_fight_1 = ImageIO.read(getClass().getResourceAsStream("./assets/fighter/right_fight_1.png"));
+            right_fight_1 = ImageIO.read(getClass().getResourceAsStream("./assets/fighter/right_fight_1.png"));
+        } catch (Exception e) {
+            // TODO: handle exception
         }
+
     }
 
     public void update() {
-        if (keyH.upPressed == true || keyH.downPressed == true || keyH.leftPressed == true
+
+        if (attacking == true) {
+            System.out.print(attacking);
+            attacking();
+        } else if (keyH.upPressed == true || keyH.downPressed == true || keyH.leftPressed == true
                 || keyH.rightPressed == true) {
 
             if (keyH.upPressed == true) {
@@ -139,6 +154,22 @@ public class Player extends Entity {
         }
     }
 
+    public void attacking() {
+        spriteCounter++;
+
+        if (spriteCounter <= 5) {
+            spriteNum = 1;
+        }
+        if (spriteCounter > 5 && spriteCounter <= 25) {
+            spriteNum = 2;
+        }
+        if (spriteCounter > 25) {
+            spriteNum = 1;
+            spriteCounter = 0;
+            attacking = false;
+        }
+    }
+
     public void pickUpObject(int i) {
         if (i != 999) {
             String objectName = gp.obj[i].name;
@@ -182,14 +213,14 @@ public class Player extends Entity {
 
     public void interactNPC(int i) {
         if (i != 999) {
-            // if (gp.keyH.enterPressed == true) {
-            // gp.gameState = gp.dialogueState;
-            // gp.npc[i].speak();
-            // }
-            // gp.keyH.enterPressed = false;
             gp.gameState = gp.dialogueState;
             gp.npc[i].speak();
         }
+        // if (gp.keyH.enterPressed == true) {
+
+        // attacking = true;
+        // }
+
     }
 
     public void draw(Graphics2D g2) {
@@ -199,35 +230,76 @@ public class Player extends Entity {
 
         switch (direction) {
             case "up":
-                if (spriteNum == 1) {
-                    image = up1;
+                if (attacking == false) {
+                    if (spriteNum == 1) {
+                        image = up1;
+                    }
+
+                    if (spriteNum == 2) {
+                        image = up2;
+                    }
                 }
-                if (spriteNum == 2) {
-                    image = up2;
+                if (attacking == true) {
+                    if (spriteNum == 1) {
+                        image = up_fight_1;
+                    }
+                    if (spriteNum == 2) {
+                        image = up_fight_2;
+                    }
                 }
                 break;
             case "down":
-                if (spriteNum == 1) {
-                    image = down1;
+                if (attacking == false) {
+                    if (spriteNum == 1) {
+                        image = down1;
+                    }
+                    if (spriteNum == 2) {
+                        image = down2;
+                    }
                 }
-                if (spriteNum == 2) {
-                    image = down2;
+                if (attacking == true) {
+                    if (spriteNum == 1) {
+                        image = down_fight_1;
+                    }
+                    if (spriteNum == 2) {
+                        image = down_fight_2;
+                    }
                 }
                 break;
             case "left":
-                if (spriteNum == 1) {
-                    image = left1;
+                if (attacking == false) {
+                    if (spriteNum == 1) {
+                        image = left1;
+                    }
+                    if (spriteNum == 2) {
+                        image = left2;
+                    }
                 }
-                if (spriteNum == 2) {
-                    image = left2;
+                if (attacking == true) {
+                    if (spriteNum == 1) {
+                        image = left_fight_1;
+                    }
+                    if (spriteNum == 2) {
+                        image = left_fight_2;
+                    }
                 }
                 break;
             case "right":
-                if (spriteNum == 1) {
-                    image = right1;
+                if (attacking == false) {
+                    if (spriteNum == 1) {
+                        image = right1;
+                    }
+                    if (spriteNum == 2) {
+                        image = right2;
+                    }
                 }
-                if (spriteNum == 2) {
-                    image = right2;
+                if (attacking == true) {
+                    if (spriteNum == 1) {
+                        image = right_fight_1;
+                    }
+                    if (spriteNum == 2) {
+                        image = right_fight_2;
+                    }
                 }
                 break;
         }
