@@ -20,6 +20,7 @@ public class MONSTER_Golem extends Entity {
         width = 3;
         height = 3;
         type = 2;
+        life = 10;
 
         getImage();
 
