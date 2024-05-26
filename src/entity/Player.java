@@ -217,6 +217,18 @@ public class Player extends Entity {
                     gp.obj[i] = null;
                     break;
 
+                case "BinhVang":
+                    gp.playSE(1);
+                    gp.ui.showMessage("You got a Legend Altar!");
+                    gp.obj[i] = null;
+                    break;
+
+                case "CCung":
+                    gp.playSE(1);
+                    gp.ui.showMessage("You got a new weapon!");
+                    gp.obj[i] = null;
+                    break;
+
                 case "Boot":
                     gp.playSE(2);
                     gp.ui.showMessage("Speed Up!");
