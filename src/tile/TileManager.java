@@ -17,7 +17,7 @@ public class TileManager {
     public TileManager(GamePanel gp) {
         this.gp = gp;
 
-        tile = new Tile[1500];
+        tile = new Tile[2505];
         mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow];
         getTileImage();
         loadMap();
@@ -36,6 +36,23 @@ public class TileManager {
                     fileName = String.format("../assets/maps/worldmap/tile0%d.png", i);
                 } else {
                     fileName = String.format("../assets/maps/worldmap/tile%d.png", i);
+                }
+
+                tile[i].image = ImageIO.read(getClass().getResourceAsStream(fileName));
+            }
+
+            for (int i = 1250; i < 2500; i++) {
+                tile[i] = new Tile();
+                String fileName;
+
+                int local = i - 1250;
+
+                if (local < 10) {
+                    fileName = String.format("../assets/maps/worldmap2/tile00%d.png", local);
+                } else if (local < 100) {
+                    fileName = String.format("../assets/maps/worldmap2/tile0%d.png", local);
+                } else {
+                    fileName = String.format("../assets/maps/worldmap2/tile%d.png", local);
                 }
 
                 tile[i].image = ImageIO.read(getClass().getResourceAsStream(fileName));

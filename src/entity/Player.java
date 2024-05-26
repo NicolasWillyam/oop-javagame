@@ -1,14 +1,9 @@
 package entity;
 
 import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 import main.GamePanel;
 import main.KeyHandler;
@@ -47,14 +42,16 @@ public class Player extends Entity {
     }
 
     public void setDefaultValues() {
-        worldX = gp.tileSize * 7;
-        worldY = gp.tileSize * 5;
+        worldX = gp.tileSize * 6 + gp.tileSize / 2;
+        worldY = gp.tileSize * 5 + gp.tileSize / 2;
         speed = 4;
         direction = "down";
 
         // PLAYER STATUS
         maxLife = 6;
         life = maxLife;
+        maxMana = 100;
+        mana = maxMana;
     }
 
     public void getPlayerImage() {
@@ -247,6 +244,9 @@ public class Player extends Entity {
 
     public void damageMonster(int i) {
         if (i != 999) {
+
+            gp.monster[i].monsterAttacking = true;
+            gp.monster[i].damageReaction();
             if (gp.monster[i].invincible == false) {
                 gp.playSE(5);
 
@@ -346,7 +346,7 @@ public class Player extends Entity {
         // System.out.println(image);
 
         g2.drawImage(image, screenX, screenY, 2 * gp.tileSize, 2 * gp.tileSize, null);
-
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+
     }
 }

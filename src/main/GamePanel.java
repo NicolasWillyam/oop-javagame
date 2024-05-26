@@ -1,5 +1,6 @@
 package main;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -13,6 +14,7 @@ import entity.Player;
 import object.SuperObject;
 import scene.SceneManager;
 import tile.TileManager;
+import tile.TileUpper;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -31,11 +33,12 @@ public class GamePanel extends JPanel implements Runnable {
 
     // WORLD SETTINGS
     public final int maxWorldCol = 50;
-    public final int maxWorldRow = 25;
+    public final int maxWorldRow = 50;
     public final int worldWidth = tileSize * maxWorldCol;
     public final int worldHeight = tileSize * maxWorldRow;
 
     TileManager tileM = new TileManager(this);
+    TileUpper tileU = new TileUpper(this);
     public KeyHandler keyH = new KeyHandler(this);
     Thread gameThread;
     Sound sound = new Sound();
@@ -49,7 +52,8 @@ public class GamePanel extends JPanel implements Runnable {
     public Entity monster[] = new Entity[20];
     ArrayList<Entity> entityList = new ArrayList<>();
 
-    public int gameState = 0;
+    public int gameState;
+    public final int tileState = 0;
     public final int playState = 1;
     public final int pauseState = 2;
     public final int dialogueState = 3;
@@ -68,11 +72,11 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void setupGame() {
-        gameState = playState;
+        gameState = tileState;
         aSetter.setObject();
         aSetter.setNPC();
         aSetter.setMonster();
-        playMusic(0);
+        // playMusic(0);
     }
 
     public void startGameThread() {
@@ -129,33 +133,42 @@ public class GamePanel extends JPanel implements Runnable {
 
         Graphics2D g2 = (Graphics2D) g;
 
-        tileM.draw(g2);
+        if (gameState == tileState) {
+            ui.draw(g2);
+        } else {
+            tileM.draw(g2);
 
-        // OBJECTS
-        for (int i = 0; i < obj.length; i++) {
-            if (obj[i] != null) {
-                obj[i].draw(g2, this);
+            // OBJECTS
+            for (int i = 0; i < obj.length; i++) {
+                if (obj[i] != null) {
+                    obj[i].draw(g2, this);
+                }
             }
-        }
 
-        // NPC
-        for (int i = 0; i < npc.length; i++) {
-            if (npc[i] != null) {
-                npc[i].draw(g2);
+            // NPC
+
+            player.draw(g2);
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+            tileU.draw(g2);
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+            for (int i = 0; i < npc.length; i++) {
+                if (npc[i] != null) {
+                    npc[i].draw(g2);
+                }
             }
-        }
 
-        // MONSTER
+            // MONSTER
 
-        for (int i = 0; i < monster.length; i++) {
-            if (monster[i] != null) {
+            for (int i = 0; i < monster.length; i++) {
+                if (monster[i] != null) {
 
-                monster[i].draw(g2);
+                    monster[i].draw(g2);
+                }
             }
+
+            // UI
+            ui.draw(g2);
         }
-        player.draw(g2);
-        // UI
-        ui.draw(g2);
 
         g2.dispose();
     }

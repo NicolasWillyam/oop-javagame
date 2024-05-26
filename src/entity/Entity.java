@@ -39,6 +39,8 @@ public class Entity {
     public int dyingCounter = 0;
     public boolean invincible = false;
     public boolean attacking = false;
+    public boolean monsterAttacking = false;
+    public int monsterAttackCounter = 0;
     boolean hpBarOn = false;
     public int invincibleCounter = 0;
     public int hpBarCounter = 0;
@@ -49,6 +51,8 @@ public class Entity {
 
     public int maxLife;
     public int life;
+    public int maxMana;
+    public int mana;
 
     public Entity(GamePanel gp) {
         this.gp = gp;
@@ -123,35 +127,72 @@ public class Entity {
 
             switch (direction) {
                 case "up":
-                    if (spriteNum == 1) {
-                        image = up1;
-                    }
-                    if (spriteNum == 2) {
-                        image = up2;
+                    if (monsterAttacking == false) {
+                        if (spriteNum == 1) {
+                            image = up1;
+                        }
+
+                        if (spriteNum == 2) {
+                            image = up2;
+                        }
+                    } else {
+                        if (spriteNum == 1) {
+                            image = up_fight_1;
+                        }
+                        if (spriteNum == 2) {
+                            image = up_fight_2;
+                        }
                     }
                     break;
                 case "down":
-                    if (spriteNum == 1) {
-                        image = down1;
-                    }
-                    if (spriteNum == 2) {
-                        image = down2;
+                    if (monsterAttacking == false) {
+                        if (spriteNum == 1) {
+                            image = down1;
+                        }
+                        if (spriteNum == 2) {
+                            image = down2;
+                        }
+                    } else {
+                        if (spriteNum == 1) {
+                            image = down_fight_1;
+                        }
+                        if (spriteNum == 2) {
+                            image = down_fight_2;
+                        }
                     }
                     break;
                 case "left":
-                    if (spriteNum == 1) {
-                        image = left1;
-                    }
-                    if (spriteNum == 2) {
-                        image = left2;
+                    if (monsterAttacking == false) {
+                        if (spriteNum == 1) {
+                            image = left1;
+                        }
+                        if (spriteNum == 2) {
+                            image = left2;
+                        }
+                    } else {
+                        if (spriteNum == 1) {
+                            image = left_fight_1;
+                        }
+                        if (spriteNum == 2) {
+                            image = left_fight_2;
+                        }
                     }
                     break;
                 case "right":
-                    if (spriteNum == 1) {
-                        image = right1;
-                    }
-                    if (spriteNum == 2) {
-                        image = right2;
+                    if (monsterAttacking == false) {
+                        if (spriteNum == 1) {
+                            image = right1;
+                        }
+                        if (spriteNum == 2) {
+                            image = right2;
+                        }
+                    } else {
+                        if (spriteNum == 1) {
+                            image = right_fight_1;
+                        }
+                        if (spriteNum == 2) {
+                            image = right_fight_2;
+                        }
                     }
                     break;
             }
@@ -160,11 +201,11 @@ public class Entity {
                 double oneScale = (double) gp.tileSize / maxLife;
                 double hpBarValue = oneScale * life;
 
-                g2.setColor(new Color(35, 35, 35));
-                g2.fillRect(screenX - 2, screenY - 17, gp.tileSize + 4, 8);
+                g2.setColor(new Color(35, 35, 35, 200));
+                g2.fillRect(screenX + gp.tileSize - 2, screenY - 17, gp.tileSize + 4, 8);
 
                 g2.setColor(new Color(255, 0, 30, 200));
-                g2.fillRect(screenX, screenY - 15, (int) hpBarValue, 4);
+                g2.fillRect(screenX + gp.tileSize, screenY - 15, (int) hpBarValue, 4);
 
                 hpBarCounter++;
 

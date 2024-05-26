@@ -13,17 +13,19 @@ public class MONSTER_Golem extends Entity {
         direction = "down";
         speed = 1;
         collisionOn = true;
-        solidArea.x = 0;
-        solidArea.y = 0;
-        solidArea.width = gp.tileSize * 3;
-        solidArea.height = gp.tileSize * 3;
         width = 3;
         height = 3;
+        solidArea.x = gp.tileSize / 2;
+        solidArea.y = gp.tileSize / 2;
+        solidArea.width = gp.tileSize * width - gp.tileSize;
+        solidArea.height = gp.tileSize * height - gp.tileSize / 2;
+
         type = 2;
         maxLife = 10;
         life = maxLife;
 
         getImage();
+        getAttackImage();
 
     }
 
@@ -43,6 +45,17 @@ public class MONSTER_Golem extends Entity {
         right1 = setup("../assets/golem/tile006");
 
         right2 = setup("../assets/golem/tile007");
+    }
+
+    public void getAttackImage() {
+        up_fight_1 = setup("../assets/golem/up_fight_1");
+        up_fight_2 = setup("../assets/golem/up_fight_2");
+        down_fight_1 = setup("../assets/golem/down_fight_1");
+        down_fight_2 = setup("../assets/golem/down_fight_2");
+        left_fight_1 = setup("../assets/golem/left_fight_1");
+        left_fight_2 = setup("../assets/golem/left_fight_2");
+        right_fight_1 = setup("../assets/golem/right_fight_1");
+        right_fight_2 = setup("../assets/golem/right_fight_2");
     }
 
     public void setAction() {
@@ -69,7 +82,24 @@ public class MONSTER_Golem extends Entity {
     }
 
     public void damageReaction() {
-        actionLockCounter = 0;
+
+        if (monsterAttacking = true) {
+            actionLockCounter = 0;
+            monsterAttackCounter++;
+
+            if (monsterAttackCounter <= 5) {
+                spriteNum = 1;
+            }
+            if (monsterAttackCounter > 5 && monsterAttackCounter <= 30) {
+                spriteNum = 2;
+            }
+
+            if (monsterAttackCounter > 30) {
+                spriteNum = 1;
+                monsterAttackCounter = 0;
+                monsterAttacking = false;
+            }
+        }
 
     }
 

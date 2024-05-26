@@ -24,9 +24,9 @@ public class AssetSetter {
         gp.obj[2].worldX = 4 * gp.tileSize;
         gp.obj[2].worldY = 11 * gp.tileSize;
 
-        gp.obj[3] = new OBJ_Boot();
-        gp.obj[3].worldX = 10 * gp.tileSize;
-        gp.obj[3].worldY = 11 * gp.tileSize;
+        // gp.obj[3] = new OBJ_Boot();
+        // gp.obj[3].worldX = 10 * gp.tileSize;
+        // gp.obj[3].worldY = 11 * gp.tileSize;
 
     }
 
@@ -41,6 +41,10 @@ public class AssetSetter {
         gp.monster[0] = new MONSTER_Golem(gp);
         gp.monster[0].worldX = gp.tileSize * 10;
         gp.monster[0].worldY = gp.tileSize * 10;
+
+        gp.monster[1] = new MONSTER_Golem(gp);
+        gp.monster[1].worldX = gp.tileSize * 16;
+        gp.monster[1].worldY = gp.tileSize * 14;
     }
 
 }
