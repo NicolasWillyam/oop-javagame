@@ -1,32 +1,66 @@
 package main;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
+
+import entity.Entity;
+import entity.Player;
+import object.SuperObject;
+import scene.SceneManager;
+import tile.TileManager;
+import tile.TileUpper;
 
 public class GamePanel extends JPanel implements Runnable {
 
     private static final int FPS = 60;
+    SceneManager sceneM = new SceneManager(this);
+
     // SCREEN SETTINGS
-    final int originTileSize = 16; // Pixels
-    final int scale = 3;
+    final int originTileSize = 32; // Pixels
+    public final int scale = 2;
 
-    final int tileSize = originTileSize * scale;
-    final int maxScreenCol = 16;
-    final int maxScreenRow = 12;
-    final int screenWidth = tileSize * maxScreenCol;
-    final int screenHeight = tileSize * maxScreenRow;
+    public final int tileSize = originTileSize * scale;
+    public final int maxScreenCol = 14;
+    public final int maxScreenRow = 12;
+    public final int screenWidth = tileSize * maxScreenCol;
+    public final int screenHeight = tileSize * maxScreenRow;
 
-    KeyHandler keyH = new KeyHandler();
+    // WORLD SETTINGS
+    public final int maxWorldCol = 50;
+    public final int maxWorldRow = 50;
+    public final int worldWidth = tileSize * maxWorldCol;
+    public final int worldHeight = tileSize * maxWorldRow;
 
+    TileManager tileM = new TileManager(this);
+    TileUpper tileU = new TileUpper(this);
+    public KeyHandler keyH = new KeyHandler(this);
     Thread gameThread;
+    Sound sound = new Sound();
+    public CollisionChecker cChecker = new CollisionChecker(this);
+    public AssetSetter aSetter = new AssetSetter(this);
+
+    public Player player = new Player(this, keyH);
+    public UI ui = new UI(this);
+    public SuperObject obj[] = new SuperObject[1000];
+    public Entity npc[] = new Entity[1000];
+    public Entity monster[] = new Entity[1000];
+    ArrayList<Entity> entityList = new ArrayList<>();
+
+    public int gameState;
+    public final int tileState = 0;
+    public final int playState = 1;
+    public final int pauseState = 2;
+    public final int dialogueState = 3;
 
     // SET PLAYER'S DEFAULT POSTION
-    int playerX = 100;
-    int playerY = 100;
+    int playerX = screenWidth / 2;
+    int playerY = screenHeight / 2;
     int playerSpeed = 4;
 
     public GamePanel() {
@@ -35,6 +69,14 @@ public class GamePanel extends JPanel implements Runnable {
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true);
+    }
+
+    public void setupGame() {
+        gameState = tileState;
+        aSetter.setObject();
+        aSetter.setNPC();
+        aSetter.setMonster();
+        // playMusic(0);
     }
 
     public void startGameThread() {
@@ -66,15 +108,23 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void update() {
 
-        if (keyH.upPressed == true) {
-            playerY -= playerSpeed;
+        player.update();
+        for (int i = 0; i < npc.length; i++) {
+            if (npc[i] != null) {
+                npc[i].update();
+            }
+        }
+        for (int i = 0; i < monster.length; i++) {
+            if (monster[i] != null) {
+                if (monster[i].alive == true && monster[i].dying == false) {
+                    monster[i].update();
+                }
 
-        } else if (keyH.downPressed == true) {
-            playerY += playerSpeed;
-        } else if (keyH.leftPressed == true) {
-            playerX -= playerSpeed;
-        } else if (keyH.rightPressed == true) {
-            playerX += playerSpeed;
+                if (monster[i].alive == false) {
+                    monster[i] = null;
+                }
+
+            }
         }
     }
 
@@ -83,9 +133,59 @@ public class GamePanel extends JPanel implements Runnable {
 
         Graphics2D g2 = (Graphics2D) g;
 
-        g2.setColor(Color.white);
-        g2.fillRect(playerX, playerY, tileSize, tileSize);
+        if (gameState == tileState) {
+            ui.draw(g2);
+        } else {
+            tileM.draw(g2);
+
+            // OBJECTS
+            for (int i = 0; i < obj.length; i++) {
+                if (obj[i] != null) {
+                    obj[i].draw(g2, this);
+                }
+            }
+
+            // NPC
+
+            player.draw(g2);
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+            tileU.draw(g2);
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+            for (int i = 0; i < npc.length; i++) {
+                if (npc[i] != null) {
+                    npc[i].draw(g2);
+                }
+            }
+
+            // MONSTER
+
+            for (int i = 0; i < monster.length; i++) {
+                if (monster[i] != null) {
+
+                    monster[i].draw(g2);
+                }
+            }
+
+            // UI
+            ui.draw(g2);
+        }
+
         g2.dispose();
+    }
+
+    public void playMusic(int i) {
+        sound.setFile(i);
+        sound.play();
+        sound.loop();
+    }
+
+    public void stopMusic() {
+        sound.stop();
+    }
+
+    public void playSE(int i) {
+        sound.setFile(i);
+        sound.play();
     }
 
 }
