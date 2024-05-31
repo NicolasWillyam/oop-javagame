@@ -196,6 +196,10 @@ public class Player extends Entity {
             spriteNum = 1;
             spriteCounter = 0;
             attacking = false;
+            if (mana >= 2) {
+                mana -= 2;
+            }
+            System.out.println(mana);
         }
     }
 
@@ -206,6 +210,9 @@ public class Player extends Entity {
                 case "Altar":
                     gp.playSE(1);
                     hasAltar++;
+                    if (life < maxLife) {
+                        life++;
+                    }
                     gp.obj[i] = null;
                     gp.ui.showMessage("You got a Altar!");
                     break;
@@ -221,11 +228,13 @@ public class Player extends Entity {
                     gp.playSE(1);
                     gp.ui.showMessage("You got a Legend Altar!");
                     gp.obj[i] = null;
+                    mana += 25;
                     break;
 
                 case "CCung":
                     gp.playSE(1);
                     gp.ui.showMessage("You got a new weapon!");
+
                     gp.obj[i] = null;
                     break;
 

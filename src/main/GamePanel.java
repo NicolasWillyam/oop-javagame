@@ -57,6 +57,8 @@ public class GamePanel extends JPanel implements Runnable {
     public final int playState = 1;
     public final int pauseState = 2;
     public final int dialogueState = 3;
+    public final int openMapState = 4;
+    public final int openBagState = 5;
 
     // SET PLAYER'S DEFAULT POSTION
     int playerX = screenWidth / 2;
