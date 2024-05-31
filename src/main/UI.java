@@ -25,7 +25,7 @@ public class UI {
     BufferedImage altarImage, heart_100, heart_75, heart_50, heart_35, heart_10, heart_0;
     BufferedImage mana_100, mana_75, mana_50, mana_35, mana_10, mana_0;
     BufferedImage gold, diamond;
-    BufferedImage homeScreen;
+    BufferedImage homeScreen, mapUI, bagUI;
     public boolean messageOn = false;
     public String message = "";
     int messageCounter = 0;
@@ -56,6 +56,8 @@ public class UI {
             homeScreen = ImageIO.read(getClass().getResourceAsStream("../assets/scene/homescreen.png"));
             gold = ImageIO.read(getClass().getResourceAsStream("../assets/objects/gold.png"));
             diamond = ImageIO.read(getClass().getResourceAsStream("../assets/objects/diamond.png"));
+            mapUI = ImageIO.read(getClass().getResourceAsStream("../assets/tiles/worldmap_ui.png"));
+            bagUI = ImageIO.read(getClass().getResourceAsStream("../assets/tiles/bag_ui.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -82,6 +84,7 @@ public class UI {
     public void showMessage(String text) {
         message = text;
         messageOn = true;
+
     }
 
     public void draw(Graphics2D g2) {
@@ -160,7 +163,7 @@ public class UI {
         // MESSAGE
         if (messageOn == true) {
             g2.setFont(g2.getFont().deriveFont(24F));
-            g2.drawString(message, gp.tileSize / 2, gp.tileSize * 5);
+            drawSubWindow(gp.tileSize / 2, gp.tileSize * 2, gp.tileSize * 5, 10);
 
             messageCounter++;
             if (messageCounter > 120) {
@@ -184,10 +187,31 @@ public class UI {
 
         if (gp.gameState == gp.playState) {
             drawPlayerLife();
-            drawPlayerMana();
-            drawPlayerCoin();
+        }
+
+        if (gp.gameState == gp.openMapState) {
+            drawMapUI();
 
         }
+        if (gp.gameState == gp.openBagState) {
+            drawBagUI();
+
+        }
+
+        if (gp.gameState != gp.tileState) {
+            drawPlayerLife();
+            drawPlayerMana();
+            drawPlayerCoin();
+        }
+    }
+
+    public void drawBagUI() {
+        g2.drawImage(bagUI, 0, 0, gp.screenWidth, gp.screenHeight, null);
+
+    }
+
+    public void drawMapUI() {
+        g2.drawImage(mapUI, 0, 0, gp.screenWidth, gp.screenHeight, null);
 
     }
 
@@ -229,19 +253,18 @@ public class UI {
         int x = gp.tileSize / 4;
         int y = gp.tileSize + 4;
 
-        // if (gp.player.mana == )
-        // g2.drawImage(mana_100, x, y, gp.tileSize * 3, gp.tileSize, null);
-        // if (gp.player.life == 5)
-        // g2.drawImage(mana_75, x, y, gp.tileSize * 3, gp.tileSize, null);
-        // if (gp.player.life == 4)
-        // g2.drawImage(mana_50, x, y, gp.tileSize * 3, gp.tileSize, null);
-        // if (gp.player.life == 3)
-        // g2.drawImage(mana_35, x, y, gp.tileSize * 3, gp.tileSize, null);
-        // if (gp.player.life == 2)
-        // g2.drawImage(mana_10, x, y, gp.tileSize * 3, gp.tileSize, null);
-        // if (gp.player.life == 1 || gp.player.life == 0)
-        // g2.drawImage(mana_0, x, y, gp.tileSize * 3, gp.tileSize, null);
-        g2.drawImage(mana_100, x, y, gp.tileSize * 3, gp.tileSize, null);
+        if (gp.player.mana > 75 && gp.player.mana <= 100)
+            g2.drawImage(mana_100, x, y, gp.tileSize * 3, gp.tileSize, null);
+        if (gp.player.mana > 50 && gp.player.mana <= 75)
+            g2.drawImage(mana_75, x, y, gp.tileSize * 3, gp.tileSize, null);
+        if (gp.player.mana > 35 && gp.player.mana <= 50)
+            g2.drawImage(mana_50, x, y, gp.tileSize * 3, gp.tileSize, null);
+        if (gp.player.mana > 25 && gp.player.mana <= 35)
+            g2.drawImage(mana_35, x, y, gp.tileSize * 3, gp.tileSize, null);
+        if (gp.player.mana > 10 && gp.player.mana <= 25)
+            g2.drawImage(mana_10, x, y, gp.tileSize * 3, gp.tileSize, null);
+        if (gp.player.mana >= 0 && gp.player.mana <= 10)
+            g2.drawImage(mana_0, x, y, gp.tileSize * 3, gp.tileSize, null);
 
     }
 

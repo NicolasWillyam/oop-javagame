@@ -63,17 +63,26 @@ public class KeyHandler implements KeyListener {
 
                 enterPressed = true;
             }
+
             if (code == KeyEvent.VK_Y) {
                 yPressed = true;
             }
-            if (code == KeyEvent.VK_P) {
-                if (gp.gameState == gp.playState) {
-                    gp.gameState = gp.pauseState;
-                } else if (gp.gameState == gp.pauseState) {
-                    gp.gameState = gp.playState;
+            if (code == KeyEvent.VK_M) {
 
-                }
+                gp.gameState = gp.openMapState;
             }
+            if (code == KeyEvent.VK_B) {
+
+                gp.gameState = gp.openBagState;
+            }
+            // if (code == KeyEvent.VK_P) {
+            // if (gp.gameState == gp.playState) {
+            // gp.gameState = gp.pauseState;
+            // } else if (gp.gameState == gp.pauseState) {
+            // gp.gameState = gp.playState;
+
+            // }
+            // }
         }
 
         else if (gp.gameState == gp.dialogueState) {
@@ -81,8 +90,18 @@ public class KeyHandler implements KeyListener {
                 gp.gameState = gp.playState;
 
             }
-        }
+        } else if (gp.gameState == gp.openMapState) {
+            if (code == KeyEvent.VK_ESCAPE) {
 
+                gp.gameState = gp.playState;
+            }
+
+        } else if (gp.gameState == gp.openBagState) {
+            if (code == KeyEvent.VK_ESCAPE) {
+
+                gp.gameState = gp.playState;
+            }
+        }
     }
 
     @Override

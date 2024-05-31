@@ -58,9 +58,6 @@ public class TileUpper {
                 tile[i].image = ImageIO.read(getClass().getResourceAsStream(fileName));
             }
 
-            tile[1] = new Tile();
-            tile[1].image = ImageIO.read(getClass().getResourceAsStream("../assets/maps/upper/upper1-1-1/tile001.png"));
-
         } catch (Exception e) {
 
             e.printStackTrace();
